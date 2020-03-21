@@ -209,6 +209,183 @@ public String getGUID() {
 public void setGUID(String gUID) {
 	GUID = gUID;
 }
+@Override
+public int hashCode() {
+	final int prime = 31;
+	int result = 1;
+	result = prime * result + ((Birthday == null) ? 0 : Birthday.hashCode());
+	result = prime * result + ((CCExpires == null) ? 0 : CCExpires.hashCode());
+	result = prime * result + ((CCNumber == null) ? 0 : CCNumber.hashCode());
+	result = prime * result + ((CCType == null) ? 0 : CCType.hashCode());
+	result = prime * result + ((CVV2 == null) ? 0 : CVV2.hashCode());
+	result = prime * result + ((Centimeters == null) ? 0 : Centimeters.hashCode());
+	result = prime * result + ((City == null) ? 0 : City.hashCode());
+	result = prime * result + ((Codigo == null) ? 0 : Codigo.hashCode());
+	result = prime * result + ((Color == null) ? 0 : Color.hashCode());
+	result = prime * result + ((CountryFull == null) ? 0 : CountryFull.hashCode());
+	result = prime * result + ((EmailAddress == null) ? 0 : EmailAddress.hashCode());
+	result = prime * result + ((GUID == null) ? 0 : GUID.hashCode());
+	result = prime * result + ((Gender == null) ? 0 : Gender.hashCode());
+	result = prime * result + ((GivenName == null) ? 0 : GivenName.hashCode());
+	result = prime * result + ((Kilograms == null) ? 0 : Kilograms.hashCode());
+	result = prime * result + ((NameSet == null) ? 0 : NameSet.hashCode());
+	result = prime * result + ((NationalID == null) ? 0 : NationalID.hashCode());
+	result = prime * result + ((Password == null) ? 0 : Password.hashCode());
+	result = prime * result + ((State == null) ? 0 : State.hashCode());
+	result = prime * result + ((StreetAddress == null) ? 0 : StreetAddress.hashCode());
+	result = prime * result + ((Surname == null) ? 0 : Surname.hashCode());
+	result = prime * result + ((TelephoneNumber == null) ? 0 : TelephoneNumber.hashCode());
+	result = prime * result + ((Title == null) ? 0 : Title.hashCode());
+	result = prime * result + ((Username == null) ? 0 : Username.hashCode());
+	result = prime * result + ((ZipCode == null) ? 0 : ZipCode.hashCode());
+	return result;
+}
+@Override
+public boolean equals(Object obj) {
+	if (this == obj)
+		return true;
+	if (obj == null)
+		return false;
+	if (getClass() != obj.getClass())
+		return false;
+	Pessoa other = (Pessoa) obj;
+	if (Birthday == null) {
+		if (other.Birthday != null)
+			return false;
+	} else if (!Birthday.equals(other.Birthday))
+		return false;
+	if (CCExpires == null) {
+		if (other.CCExpires != null)
+			return false;
+	} else if (!CCExpires.equals(other.CCExpires))
+		return false;
+	if (CCNumber == null) {
+		if (other.CCNumber != null)
+			return false;
+	} else if (!CCNumber.equals(other.CCNumber))
+		return false;
+	if (CCType == null) {
+		if (other.CCType != null)
+			return false;
+	} else if (!CCType.equals(other.CCType))
+		return false;
+	if (CVV2 == null) {
+		if (other.CVV2 != null)
+			return false;
+	} else if (!CVV2.equals(other.CVV2))
+		return false;
+	if (Centimeters == null) {
+		if (other.Centimeters != null)
+			return false;
+	} else if (!Centimeters.equals(other.Centimeters))
+		return false;
+	if (City == null) {
+		if (other.City != null)
+			return false;
+	} else if (!City.equals(other.City))
+		return false;
+	if (Codigo == null) {
+		if (other.Codigo != null)
+			return false;
+	} else if (!Codigo.equals(other.Codigo))
+		return false;
+	if (Color == null) {
+		if (other.Color != null)
+			return false;
+	} else if (!Color.equals(other.Color))
+		return false;
+	if (CountryFull == null) {
+		if (other.CountryFull != null)
+			return false;
+	} else if (!CountryFull.equals(other.CountryFull))
+		return false;
+	if (EmailAddress == null) {
+		if (other.EmailAddress != null)
+			return false;
+	} else if (!EmailAddress.equals(other.EmailAddress))
+		return false;
+	if (GUID == null) {
+		if (other.GUID != null)
+			return false;
+	} else if (!GUID.equals(other.GUID))
+		return false;
+	if (Gender == null) {
+		if (other.Gender != null)
+			return false;
+	} else if (!Gender.equals(other.Gender))
+		return false;
+	if (GivenName == null) {
+		if (other.GivenName != null)
+			return false;
+	} else if (!GivenName.equals(other.GivenName))
+		return false;
+	if (Kilograms == null) {
+		if (other.Kilograms != null)
+			return false;
+	} else if (!Kilograms.equals(other.Kilograms))
+		return false;
+	if (NameSet == null) {
+		if (other.NameSet != null)
+			return false;
+	} else if (!NameSet.equals(other.NameSet))
+		return false;
+	if (NationalID == null) {
+		if (other.NationalID != null)
+			return false;
+	} else if (!NationalID.equals(other.NationalID))
+		return false;
+	if (Password == null) {
+		if (other.Password != null)
+			return false;
+	} else if (!Password.equals(other.Password))
+		return false;
+	if (State == null) {
+		if (other.State != null)
+			return false;
+	} else if (!State.equals(other.State))
+		return false;
+	if (StreetAddress == null) {
+		if (other.StreetAddress != null)
+			return false;
+	} else if (!StreetAddress.equals(other.StreetAddress))
+		return false;
+	if (Surname == null) {
+		if (other.Surname != null)
+			return false;
+	} else if (!Surname.equals(other.Surname))
+		return false;
+	if (TelephoneNumber == null) {
+		if (other.TelephoneNumber != null)
+			return false;
+	} else if (!TelephoneNumber.equals(other.TelephoneNumber))
+		return false;
+	if (Title == null) {
+		if (other.Title != null)
+			return false;
+	} else if (!Title.equals(other.Title))
+		return false;
+	if (Username == null) {
+		if (other.Username != null)
+			return false;
+	} else if (!Username.equals(other.Username))
+		return false;
+	if (ZipCode == null) {
+		if (other.ZipCode != null)
+			return false;
+	} else if (!ZipCode.equals(other.ZipCode))
+		return false;
+	return true;
+}
+@Override
+public String toString() {
+	return "Pessoa [Codigo=" + Codigo + ", Gender=" + Gender + ", NameSet=" + NameSet + ", Title=" + Title
+			+ ", GivenName=" + GivenName + ", Surname=" + Surname + ", StreetAddress=" + StreetAddress + ", City="
+			+ City + ", State=" + State + ", ZipCode=" + ZipCode + ", CountryFull=" + CountryFull + ", EmailAddress="
+			+ EmailAddress + ", Username=" + Username + ", Password=" + Password + ", TelephoneNumber="
+			+ TelephoneNumber + ", Birthday=" + Birthday + ", CCType=" + CCType + ", CCNumber=" + CCNumber + ", CVV2="
+			+ CVV2 + ", CCExpires=" + CCExpires + ", NationalID=" + NationalID + ", Color=" + Color + ", Kilograms="
+			+ Kilograms + ", Centimeters=" + Centimeters + ", GUID=" + GUID + "]";
+}
 
 
 

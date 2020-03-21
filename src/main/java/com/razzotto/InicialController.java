@@ -8,20 +8,26 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.text.DecimalFormat;
+import java.time.Duration;
+import java.time.Instant;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Random;
 import java.util.Scanner;
+import java.util.Vector;
 
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 
 import com.google.gson.Gson;
 
+import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.scene.control.Alert;
+import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
 import javafx.scene.control.ProgressBar;
 import javafx.scene.control.TextArea;
@@ -37,9 +43,15 @@ public class InicialController {
     private ProgressBar PrB_Proecesso;
     @FXML 
     private TextArea txtA_Status;
+    @FXML 
+    private TextArea txtA_Progress;
     
-     int QTDrowsArquivoAtual;
+     Vector<String>ContabilidadeTempo = new Vector<String>();
+     String MensagemStatus= "operação";
+     int QTDrowsArquivoAtual = 100;
      int ContadorProgresso = 0;
+     int ContadorProgressoa = 0;
+     Boolean ControleStatus = true;
      File dirOriginario ;
      File dirDestinado;
     
@@ -66,6 +78,7 @@ public class InicialController {
     	try {		
 		
 			if ((dirOriginario == null)&&(dirDestinado==null)) {
+				btn_ConverteArquivo.setDisable(true);
     		Captura_Arquivo();
     		Salva_Arquivo();
     		txtA_Status.appendText("----------BEM VINDO-----------" + "\n");
@@ -75,7 +88,7 @@ public class InicialController {
 			System.out.println(dirDestinado);
     		Calcula();
     		}
-	    		
+	        
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -145,85 +158,85 @@ public class InicialController {
 		}
      
 	}
-	public  void LerCSV()
-	{
-		int contLinha =0;
-		
-		Gson gson = new Gson();
-		List<String> Atributos = new ArrayList<String>();
-		try {
-			FileWriter writer = new FileWriter(dirDestinado, false);
-			String row ;
-		BufferedReader csvReader = new BufferedReader(new FileReader(dirOriginario));
-			     	while (( row = csvReader.readLine()) != null) {
-	    	    String[] arquivoMemoria = row.split(",");
-
-				Pessoa informacoesPessoa = new Pessoa(arquivoMemoria[0], arquivoMemoria[1], arquivoMemoria[2],arquivoMemoria[3],arquivoMemoria[4], arquivoMemoria[5],
-						arquivoMemoria[6],arquivoMemoria[7],arquivoMemoria[8],arquivoMemoria[9],arquivoMemoria[10],arquivoMemoria[11], arquivoMemoria[12],arquivoMemoria[13],arquivoMemoria[14],arquivoMemoria[15],arquivoMemoria[16],
-						arquivoMemoria[17], arquivoMemoria[18],arquivoMemoria[19],arquivoMemoria[20],arquivoMemoria[21], arquivoMemoria[22],
-						arquivoMemoria[23],arquivoMemoria[24]);
-	     		 String json = gson.toJson(informacoesPessoa);
-	     		 writer.write(json +"\n");
-	     		 System.out.println(json);
-	     		contLinha++;
-     		}
-	     	  writer.close();
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-	}
 	public void Calcula() {
 		if ((dirOriginario != null)&&(dirDestinado!=null))
 		{
 			try {
-				
-				new Thread(TConversion).start();
-				ContadorProgresso = 0;
-				    new Thread(() -> {
+				/*new Thread(() -> {
+					Platform.runLater(() -> {
+					ConverterCSVforGSON();
+					 });
+				}).start();*/
+		/*		new Thread(() -> {
+					while(ControleStatus) {
+						try {
+					    Platform.runLater(() -> {
+						txtA_Status.appendText(MensagemStatus);
+						MensagemStatus = "";
+						});
+							Thread.sleep(1000);
+						} catch (InterruptedException e) {
+							// TODO Auto-generated catch block
+							System.out.println("Problemas nas Mensagems");
+							//e.printStackTrace();
+						}
+					}
+				}).start();*/
+				//new Thread(TConversion).start();
+			//	QTDrowsArquivoAtual = 100;
+				//ContadorProgressoa = 0;
+				new Thread(() -> {
+				    	System.out.println("Iniciando Operações");
 				    	while (ContadorProgresso <= QTDrowsArquivoAtual) {
 				    		 final int position = ContadorProgresso;
 				    		 if (ContadorProgresso != QTDrowsArquivoAtual) {
 				    		 Platform.runLater(() -> {
-					            	PrB_Proecesso.setProgress((double)position/QTDrowsArquivoAtual);
-					                System.out.println("Index: " + position);
-					                //ContadorProgresso++;
+					            	PrB_Proecesso.setProgress((double)position/100);
+					               System.out.println("Index: " + position);
 					            });
 				    		 }
 				    		 else if (ContadorProgresso == QTDrowsArquivoAtual)
 				    		 {
-				    			 ContadorProgresso = 0;
+				    			ContadorProgresso++;
+  			 
 				    			  try {
 									Thread.sleep(9000);
 								} catch (InterruptedException e) {
 									e.printStackTrace();
 								}
-				    			 System.out.println("igual: " + position);
 				    		 }
 				    		  try{
-					                Thread.sleep(500);
+				    			  Thread.sleep(500);
 					            }catch(Exception e){ System.err.println(e); }
 					         }
 				    }).start();
-				    	
-			
-			    /*	while (ContadorProgresso <= QTDrowsArquivoAtual) {
-				PrB_Proecesso.setProgress(ContadorProgresso);
-				System.out.println(ContadorProgresso);
-				ContadorProgresso++;
-					Thread.sleep(1000);
-				} */
-			    
-			    
+				////////
+				ConverterCSVforGSON();
+				txtA_Status.appendText("Resultado da Contabilização de TEMPO:" + "\n");
+				for (String Tempo : ContabilidadeTempo) {
+					txtA_Status.appendText(Tempo);
+					txtA_Status.appendText("\n");
+				}
+				    				    
 			System.out.println("-----");
 			} catch (Exception e) {
-				e.printStackTrace();
+				Alert alert = new Alert(AlertType.ERROR);
+				alert.setTitle("OCORREU UM ERRO!");
+				alert.setHeaderText(null);
+				alert.setContentText("Não Foi Possivel Converter!");
+
+				alert.showAndWait();
 			}
 		}
 		else 
 		{
-			System.out.println("Não Foi encontrado o destino ");
-			System.out.println(dirOriginario.getAbsolutePath());
-			System.out.println(dirDestinado.getAbsolutePath());
+			Alert alert = new Alert(AlertType.INFORMATION);
+			alert.setTitle("INFORME DIRETORIO");
+			alert.setHeaderText(null);
+			alert.setContentText("Deve-se Informar os Diretorios!");
+
+			alert.showAndWait();
+			
 		}
 		
 //
@@ -261,12 +274,6 @@ public class InicialController {
 			PrB_Proecesso.setMaxWidth(1000);
 			Thread.sleep(5000);
 			PrB_Proecesso.setProgress(500);
-	/*	while (ContadorProgresso <= QTDrowsArquivoAtual) {
-			PrB_Proecesso.setProgress(ContadorProgresso);
-			System.out.println(ContadorProgresso);
-			ContadorProgresso++;
-				Thread.sleep(1000);
-			} */
 			Thread.sleep(5000);
 			
 		}catch (InterruptedException e) {
@@ -274,22 +281,28 @@ public class InicialController {
 		}
 	
 	}
+	public String obterDuracao(Instant inicio, Instant fim, String Mensagem) {
+		Duration decorrido = Duration.between(inicio, fim);
+		long decorridoMilissegundos = decorrido.toMillis();
+		String Retorno = Mensagem + decorridoMilissegundos + " Milesgundos";
+		return Retorno;
+		
+	}
 	public void ConverterCSVforGSON() {
 		try {
-			txtA_Status.appendText("*************Iniciando Leitura***************" + "\n");
+			MensagemStatus="*************Iniciando Leitura***************" + "\n";
 			String row;
-			//Gson gson = new Gson();
-	//		FileWriter writer = new FileWriter(dirDestinado, false);
 			List<Pessoa> ListaPessoas = new ArrayList<Pessoa>();
+			Instant inicioOpenFile =Instant.now();
 			BufferedReader csvReader = new BufferedReader(new FileReader(dirOriginario));
+			Instant fimOpenFile = Instant.now();
+			ContabilidadeTempo.add(obterDuracao(inicioOpenFile, fimOpenFile, "Tempo para abrir Arquivo:"));
 			BufferedReader contarLinhas = new BufferedReader(new FileReader(dirOriginario));
 			while (( row = contarLinhas.readLine()) != null) {
 				QTDrowsArquivoAtual++;
 			}
-			//PrB_Proecesso.setMaxWidth(QTDrowsArquivoAtual);
-			txtA_Status.appendText("---------Quantidade de Linhas: " + QTDrowsArquivoAtual + "-----------\n");
-			//PrB_Proecesso = new ProgressBar(QTDrowsArquivoAtual);
-		//	System.out.println("tamanho: " + QTDrowsArquivoAtual);
+			MensagemStatus="---------Quantidade de Linhas: " + QTDrowsArquivoAtual + "-----------\n";
+			Instant inicioLeituraFile =Instant.now();
 			while (( row = csvReader.readLine()) != null) {
 				ContadorProgresso++;
 				//Thread.sleep(5000);
@@ -301,34 +314,51 @@ public class InicialController {
 	    	     ListaPessoas.add(informacoesPessoa);
    		 
      		}
-			txtA_Status.appendText("-------------Leitura bem sucedida!------------" + "\n");
-		//	System.out.println("Leitura Concluida Com Sucesso");
+			Instant fimLeituraFile = Instant.now();
+			ContabilidadeTempo.add(obterDuracao(inicioLeituraFile, fimLeituraFile, "Tempo leitura:"));
+			MensagemStatus="-------------Leitura bem sucedida!------------" + "\n";
 			EscreveJson(ListaPessoas);
 	  
 		} catch (Exception e) {
-			txtA_Status.appendText("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!" + "\n");
-			txtA_Status.appendText("A Leitura NÃO foi Concluida Com Sucesso! O tipo de arquivo pode não condiz com o tipo requerido" + "\n");
-			txtA_Status.appendText("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!" + "\n");
-			//System.out.println("A Leitura NÃO foi Concluida Com Sucesso! O tipo de arquivo pode não condizer com o tipo");
+			Alert alert = new Alert(AlertType.ERROR);
+			alert.setTitle("OCORREU UM ERRO!");
+			alert.setHeaderText(null);
+			alert.setContentText("A Leitura NÃO foi Concluida Com Sucesso! \n O tipo de arquivo pode não condiz com o tipo requerido");
+			alert.showAndWait();
+		
 		}
 	}
 	public void EscreveJson (List<Pessoa> ListaPessoas) throws InterruptedException {
 		try {
-			Thread.sleep(5000);
-			txtA_Status.appendText("*************Iniciando Conversão CSV >>> JSON***************" + "\n");
+			List<String> ObjJson = new ArrayList<String>();
+			MensagemStatus="*************Iniciando Conversão CSV >>> JSON***************" + "\n";
 			FileWriter writer = new FileWriter(dirDestinado, false);
 			Gson gson = new Gson();
+			Instant InicioConversao = Instant.now();
 			for (Pessoa pessoa : ListaPessoas) {
+				 ContadorProgresso++;
 				 String json = gson.toJson(pessoa);
+				 ObjJson.add(json);
 	     		 writer.write(json +"\n");
-	     		 System.out.println(json);
+			}
+			Instant FimConversao = Instant.now();
+			ContabilidadeTempo.add(obterDuracao(InicioConversao, FimConversao, "Tempo Conversão:"));
+			Instant InicioEscrita = Instant.now();
+			for (String pessoa : ObjJson) {
+				 ContadorProgresso++;
+	     		 writer.write(pessoa +"\n");
 			}
 		   	writer.close();
-			txtA_Status.appendText("*************Operação Finalizada com SUCESSO!***************" + "\n");
+			Instant FimEscrita = Instant.now();
+			ContabilidadeTempo.add(obterDuracao(InicioEscrita, FimEscrita, "Tempo Escrita:"));
+		   	MensagemStatus="*************Operação Finalizada com SUCESSO!***************" + "\n";
 			} catch (IOException e) {
-				txtA_Status.appendText("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!" + "\n");
-				txtA_Status.appendText("Ocorreu um erro durente a Conversão" + "\n");
-				txtA_Status.appendText("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!" + "\n");
+				
+				Alert alert = new Alert(AlertType.ERROR);
+				alert.setTitle("OCORREU UM ERRO!");
+				alert.setHeaderText(null);
+				alert.setContentText("Ocorreu um erro durente a Conversão");
+				alert.showAndWait();
 				
 		}
 
